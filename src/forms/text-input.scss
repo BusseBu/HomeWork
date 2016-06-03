@@ -1,0 +1,28 @@
+.text-input {
+  margin-bottom: 10px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &__label {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 13px;
+    font-weight: 200;
+    margin-right: 10px;
+    min-width: 100px
+  }
+
+  &__input {
+    display: inline-block;
+    vertical-align: middle;
+    border: 1px solid #dddddd;
+    background: #fff;
+    padding: 10px;
+
+    &.error {
+      border: 1px solid red;
+    }
+  }
+}

@@ -1,0 +1,57 @@
+@import 'user-list/user-list';
+@import 'modal/modal';
+@import 'forms/text-input';
+@import 'forms/date-input';
+@import 'forms/radio-input';
+@import 'form-alert/form-alert';
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.title {
+  text-align: center;
+  font-weight: 400;
+}
+
+.author {
+  color: #626262;
+  text-align: center;
+  font-weight: 300;
+}
+
+.block-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.block {
+  background: #f4f4f4;
+  border-radius: 5px;
+  border: 1px solid #dfdfdf;
+  padding: 0 20px 20px;
+  margin: 20px;
+  min-width: 474px;
+  position: relative;
+
+  &__title {
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+
+  &:first-child {
+    margin-left: 0;
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.commentary {
+  color: #626262;
+  font-weight: 300;
+}
