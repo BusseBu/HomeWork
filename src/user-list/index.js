@@ -8,6 +8,11 @@ import userCreate from '../modal/modal-templates/user-create.jade';
 export default class UserList {
     constructor(options) {
         this._mainUser = options.user;
+
+        document.querySelector(".user-add").addEventListener("click", () => {
+            this.addClickHandler();
+        });
+
         this.getUsers();
     }
 
@@ -32,13 +37,41 @@ export default class UserList {
         });
 
         xhr.send(JSON.stringify(user));
+
+        xhr.onloadend = () => {
+            this.getUsers();
+        };
+    }
+
+    addClickHandler() {
+        let self = this;
+        new Modal({
+            id: "user-new",
+            template: userCreate(),
+            onClick: function (event) {
+                if (event.target.closest(".modal-window__close")) {
+                    this.closeModal();
+                    document.body.removeEventListener("click",  this._clickHandler);
+                }
+                if (event.target.closest("[type='submit']")) {
+                    event.preventDefault();
+                    let alert = self.handleFormErrors();
+
+                    if (!alert) {
+                        self.addUser(document.forms.usercreate);
+                        this.closeModal();
+                        document.body.removeEventListener("click",  this._clickHandler);
+                    }
+                }
+            }
+        });
     }
 
     getUsers() {
         let XHR = ("onload" in new XMLHttpRequest()) ? XMLHttpRequest : XDomainRequest;
         let xhr = new XHR();
 
-        xhr.open('GET', 'http://test-api.javascript.ru/v1/' + this._mainUser + "/users?delay=2000", true);
+        xhr.open('GET', 'http://test-api.javascript.ru/v1/' + this._mainUser + "/users", true);
         xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
 
         xhr.send();
@@ -53,35 +86,6 @@ export default class UserList {
                 this.makeList(users);
             }
         };
-    }
-
-
-    addUserHandler() {
-        let self = this;
-
-        document.querySelector(".user-add").addEventListener("click", () => {
-            new Modal({
-                id: "user-new",
-                template: userCreate(),
-                onClick: function (event) {
-                    if (event.target.closest(".modal-window__close")) {
-                        this.closeModal();
-                        document.body.removeEventListener("click",  this._clickHandler);
-                    }
-                    if (event.target.closest("[type='submit']")) {
-                        event.preventDefault();
-                        let alert = self.handleFormErrors();
-
-                        if (!alert) {
-                            self.addUser(document.forms.usercreate);
-                            this.closeModal();
-                            document.body.removeEventListener("click",  this._clickHandler);
-                            self.getUsers();
-                        }
-                    }
-                }
-            });
-        })
     }
 
     handleFormErrors() {
@@ -129,9 +133,7 @@ export default class UserList {
             if (eTarget.closest(".user-list__edit-item--delete")) {
                 this.deleteUser(event);
             }
-        })
-
-        this.addUserHandler();
+        });
     }
 
     editUser(event, users) {
@@ -201,10 +203,7 @@ export default class UserList {
         xhr.send(JSON.stringify(user));
 
         xhr.onloadend = () => {
-            if (xhr.responseText.length) {
-                let users = JSON.parse(xhr.responseText);
-                this.getUsers();
-            }
+            this.getUsers();
         };
     }
 

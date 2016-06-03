@@ -102,15 +102,24 @@
 	
 	var UserList = function () {
 	    function UserList(options) {
+	        var _this = this;
+	
 	        _classCallCheck(this, UserList);
 	
 	        this._mainUser = options.user;
+	
+	        document.querySelector(".user-add").addEventListener("click", function () {
+	            _this.addClickHandler();
+	        });
+	
 	        this.getUsers();
 	    }
 	
 	    _createClass(UserList, [{
 	        key: 'addUser',
 	        value: function addUser(form) {
+	            var _this2 = this;
+	
 	            var xhr = new XMLHttpRequest();
 	
 	            xhr.open('POST', 'http://test-api.javascript.ru/v1/' + this._mainUser + "/users", true);
@@ -131,16 +140,45 @@
 	            });
 	
 	            xhr.send(JSON.stringify(user));
+	
+	            xhr.onloadend = function () {
+	                _this2.getUsers();
+	            };
+	        }
+	    }, {
+	        key: 'addClickHandler',
+	        value: function addClickHandler() {
+	            var self = this;
+	            new _modal2.default({
+	                id: "user-new",
+	                template: (0, _userCreate2.default)(),
+	                onClick: function onClick(event) {
+	                    if (event.target.closest(".modal-window__close")) {
+	                        this.closeModal();
+	                        document.body.removeEventListener("click", this._clickHandler);
+	                    }
+	                    if (event.target.closest("[type='submit']")) {
+	                        event.preventDefault();
+	                        var alert = self.handleFormErrors();
+	
+	                        if (!alert) {
+	                            self.addUser(document.forms.usercreate);
+	                            this.closeModal();
+	                            document.body.removeEventListener("click", this._clickHandler);
+	                        }
+	                    }
+	                }
+	            });
 	        }
 	    }, {
 	        key: 'getUsers',
 	        value: function getUsers() {
-	            var _this = this;
+	            var _this3 = this;
 	
 	            var XHR = "onload" in new XMLHttpRequest() ? XMLHttpRequest : XDomainRequest;
 	            var xhr = new XHR();
 	
-	            xhr.open('GET', 'http://test-api.javascript.ru/v1/' + this._mainUser + "/users?delay=2000", true);
+	            xhr.open('GET', 'http://test-api.javascript.ru/v1/' + this._mainUser + "/users", true);
 	            xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
 	
 	            xhr.send();
@@ -152,38 +190,9 @@
 	                document.querySelector(".loading-gif").style.display = "none";
 	                if (xhr.responseText.length) {
 	                    var users = JSON.parse(xhr.responseText);
-	                    _this.makeList(users);
+	                    _this3.makeList(users);
 	                }
 	            };
-	        }
-	    }, {
-	        key: 'addUserHandler',
-	        value: function addUserHandler() {
-	            var self = this;
-	
-	            document.querySelector(".user-add").addEventListener("click", function () {
-	                new _modal2.default({
-	                    id: "user-new",
-	                    template: (0, _userCreate2.default)(),
-	                    onClick: function onClick(event) {
-	                        if (event.target.closest(".modal-window__close")) {
-	                            this.closeModal();
-	                            document.body.removeEventListener("click", this._clickHandler);
-	                        }
-	                        if (event.target.closest("[type='submit']")) {
-	                            event.preventDefault();
-	                            var alert = self.handleFormErrors();
-	
-	                            if (!alert) {
-	                                self.addUser(document.forms.usercreate);
-	                                this.closeModal();
-	                                document.body.removeEventListener("click", this._clickHandler);
-	                                self.getUsers();
-	                            }
-	                        }
-	                    }
-	                });
-	            });
 	        }
 	    }, {
 	        key: 'handleFormErrors',
@@ -216,7 +225,7 @@
 	    }, {
 	        key: 'makeList',
 	        value: function makeList(users) {
-	            var _this2 = this;
+	            var _this4 = this;
 	
 	            var jadeUsers = {
 	                users: users
@@ -229,14 +238,12 @@
 	            document.querySelector(".user-list").addEventListener("click", function (event) {
 	                var eTarget = event.target;
 	                if (eTarget.closest(".user-list__edit-item--edit")) {
-	                    _this2.editUser(event, users);
+	                    _this4.editUser(event, users);
 	                }
 	                if (eTarget.closest(".user-list__edit-item--delete")) {
-	                    _this2.deleteUser(event);
+	                    _this4.deleteUser(event);
 	                }
 	            });
-	
-	            this.addUserHandler();
 	        }
 	    }, {
 	        key: 'editUser',
@@ -288,7 +295,7 @@
 	    }, {
 	        key: 'updateUser',
 	        value: function updateUser(form, id) {
-	            var _this3 = this;
+	            var _this5 = this;
 	
 	            var XHR = "onload" in new XMLHttpRequest() ? XMLHttpRequest : XDomainRequest;
 	            var xhr = new XHR();
@@ -310,16 +317,13 @@
 	            xhr.send(JSON.stringify(user));
 	
 	            xhr.onloadend = function () {
-	                if (xhr.responseText.length) {
-	                    var users = JSON.parse(xhr.responseText);
-	                    _this3.getUsers();
-	                }
+	                _this5.getUsers();
 	            };
 	        }
 	    }, {
 	        key: 'deleteUser',
 	        value: function deleteUser(event) {
-	            var _this4 = this;
+	            var _this6 = this;
 	
 	            event.preventDefault();
 	            var eTarget = event.target;
@@ -331,7 +335,7 @@
 	                    var XHR = "onload" in new XMLHttpRequest() ? XMLHttpRequest : XDomainRequest;
 	                    var xhr = new XHR();
 	
-	                    xhr.open('DELETE', 'http://test-api.javascript.ru/v1/' + _this4._mainUser + "/users/" + id, true);
+	                    xhr.open('DELETE', 'http://test-api.javascript.ru/v1/' + _this6._mainUser + "/users/" + id, true);
 	
 	                    xhr.send();
 	
