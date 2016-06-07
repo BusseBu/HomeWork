@@ -1,4 +1,11 @@
-# H1 Домашнее задание 31.05.2016
+# Домашнее задание 31.05.2016
+
+1. First ordered list item
+2. Another item
+⋅⋅* Unordered sub-list. 
+1. Actual numbers don't matter, just that it's a number
+⋅⋅1. Ordered sub-list
+4. And another item.
 
 4 класса.
 1. UserList отвечает за создание нового списка. Имеет несколько методов, которые вызывают соответствующие методы UserRequest и создают новые окна.
