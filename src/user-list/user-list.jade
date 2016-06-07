@@ -1,6 +1,4 @@
-ul(class='user-list', onselectstart='return false', onmousedown="return false")
-	each val in users
-		li(class='user-list__item', data-id=val._id)= val.fullName
-			div.user-list__edit
-				a(class="user-list__edit-item user-list__edit-item--edit", href="#")
-				a(class="user-list__edit-item user-list__edit-item--delete", href="#")
+li(class='user-list__item', data-id=_id)= fullName
+	div.user-list__edit
+		a(class="user-list__edit-item user-list__edit-item--edit", href="#")
+		a(class="user-list__edit-item user-list__edit-item--delete", href="#")

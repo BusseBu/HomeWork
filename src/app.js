@@ -3,6 +3,4 @@
 import './app.scss';
 
 import UserList from './user-list';
-let userList = new UserList({
-    user: 'bussebu'
-});
+UserList.createNewList('bussebu');
