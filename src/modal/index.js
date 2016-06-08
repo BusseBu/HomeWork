@@ -1,5 +1,7 @@
 import template from './modal.jade';
 
+import './modal.scss';
+
 export default class Modal {
     constructor(options) {
         // Я не передаю элемент, потому что не хочу, чтобы у меня болтались лишние элементы на странице
